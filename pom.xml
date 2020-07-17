@@ -12,7 +12,7 @@
     <artifactId>desafio-banco</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>desafio-banco</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Desafio de banco fictício for CastGroup</description>
 
     <properties>
         <java.version>11</java.version>
@@ -52,13 +52,34 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Cucumber-->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>6.2.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>6.2.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>6.2.2</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
