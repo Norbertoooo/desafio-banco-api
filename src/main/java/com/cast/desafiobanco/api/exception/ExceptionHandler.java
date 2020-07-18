@@ -9,6 +9,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ExceptionHandler extends ResponseEntityExceptionHandler {
@@ -28,7 +30,13 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         Exception exception = new Exception();
         exception.setStatus(status.value());
         exception.setDataHora(OffsetDateTime.now());
-        exception.setTitulo(ex.getMessage());
+        List<String> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(x -> x.getDefaultMessage())
+                .collect(Collectors.toList());
+
+        exception.setTitulo(errors.toString().replace("[","").replace("]",""));
         return handleExceptionInternal(ex,exception,new HttpHeaders(),status,request);
     }
 }
