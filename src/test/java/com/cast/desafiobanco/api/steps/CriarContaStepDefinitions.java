@@ -1,4 +1,4 @@
-package com.cast.desafiobanco.api;
+package com.cast.desafiobanco.api.steps;
 
 import com.cast.desafiobanco.api.dto.ContaDto;
 import com.cast.desafiobanco.api.exception.Exception;
@@ -6,9 +6,6 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Então;
 import io.cucumber.java.pt.Quando;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -18,11 +15,9 @@ import java.util.logging.Logger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest()
-public class Criar_contaStepDefinitions {
+public class CriarContaStepDefinitions {
 
-    private static final Logger log = Logger.getLogger(Criar_contaStepDefinitions.class.getName());
+    private static final Logger log = Logger.getLogger(CriarContaStepDefinitions.class.getName());
 
     private String url = "http://localhost:8081";
     private ContaDto contaDto = new ContaDto();
@@ -41,12 +36,17 @@ public class Criar_contaStepDefinitions {
     @Quando("^for enviada a solicitação de criação de nova conta$")
     public void for_enviada_a_solicitação_de_criação_de_nova_conta() {
         log.info("Quando:");
-        exception = restTemplate.postForObject(url+"/contas",contaDto, Exception.class);
-        assertEquals(exception.getStatus().intValue(),400);
+        restTemplate.postForObject(url+"/contas",contaDto, Exception.class);
     }
-    @Então("^deverá ser apresentada a seguinte mensagem de erro (.+)$")
+    @Então("deverá ser apresentada a seguinte mensagem de erro {string}")
     public void deverá_ser_apresentada_a_seguinte_mensagem_de_erro(String mensagemDeErro) {
         log.info("Então:");
+        log.info(mensagemDeErro);
         assertEquals( exception.getTitulo(), mensagemDeErro);
+    }
+
+    @Então("^deverá ser retornado o número da conta criada$")
+    public void deverá_ser_retornado_o_número_da_conta_criada() {
+
     }
 }
