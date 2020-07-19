@@ -1,5 +1,6 @@
 package com.cast.desafiobanco.api.exception;
 
+import com.cast.desafiobanco.api.dto.ResponseDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,8 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         exception.setStatus(status.value());
         exception.setTitulo(ex.getMessage());
         exception.setDataHora(OffsetDateTime.now());
-        return handleExceptionInternal(ex,exception,new HttpHeaders(),status,request);
+        ResponseDto responseDto = new ResponseDto("Um erro aconteceu!",exception);
+        return handleExceptionInternal(ex,responseDto,new HttpHeaders(),status,request);
     }
 
     @Override
@@ -37,6 +39,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
                 .collect(Collectors.toList());
 
         exception.setTitulo(errors.toString().replace("[","").replace("]",""));
-        return handleExceptionInternal(ex,exception,new HttpHeaders(),status,request);
+        ResponseDto responseDto = new ResponseDto("Um erro aconteceu!",exception);
+        return handleExceptionInternal(ex,responseDto,new HttpHeaders(),status,request);
     }
 }

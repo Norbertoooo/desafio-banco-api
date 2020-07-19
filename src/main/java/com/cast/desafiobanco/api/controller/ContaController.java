@@ -42,9 +42,9 @@ public class ContaController {
     @PostMapping
     public ResponseEntity<ResponseDto> criar(@Valid @RequestBody ContaDto contaDto) {
        contaService.vereficadorDeLimiteAoCriarConta(toEntity(contaDto));
-       contaService.create(toEntity(contaDto));
+       Conta conta =contaService.create(toEntity(contaDto));
        return ResponseEntity.status(HttpStatus.CREATED)
-               .body(new ResponseDto(constantes.MENSAGEM_DE_SUCESSO_AO_CRIAR_CONTA));
+               .body(new ResponseDto(constantes.MENSAGEM_DE_SUCESSO_AO_CRIAR_CONTA, conta));
     }
 
     @PutMapping("/depositos/{id}/{valor}")
@@ -69,6 +69,7 @@ public class ContaController {
         Conta contaSolicitante = contaService.findById(transferenciaDto.getContaDoSolicitante());
         Conta contaBeneficiario = contaService.findById(transferenciaDto.getContaDoBeneficiario());
         contaService.vereficadorDeLimite(transferenciaDto.getValor());
+        contaService.vereficardoDeSaldoNaConta(contaSolicitante,transferenciaDto.getValor());
         contaService.transferir(contaSolicitante,contaBeneficiario, transferenciaDto.getValor());
         return ResponseEntity.ok().body(new ResponseDto(constantes.MENSAGEM_DE_SUCESSO_AO_TRANSFERIR));
     }
@@ -81,6 +82,7 @@ public class ContaController {
 
     private Conta toEntity(ContaDto contaDto) {
         Conta conta = new Conta();
+        conta.setId(contaDto.getNumeroDaConta());
         conta.setSaldo(contaDto.getSaldo());
         conta.setNome(contaDto.getNome());
         conta.setCpf(contaDto.getCpf());
