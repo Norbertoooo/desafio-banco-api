@@ -69,8 +69,8 @@ public class ContaController extends Constantes{
     public ResponseEntity<ResponseDto> tranferir(@Valid @RequestBody TransferenciaDto transferenciaDto) {
         Conta contaSolicitante = contaService.findByNumeroConta(transferenciaDto.getContaDoSolicitante());
         Conta contaBeneficiario = contaService.findByNumeroConta(transferenciaDto.getContaDoBeneficiario());
-        contaService.vereficadorDeLimite(transferenciaDto.getValor());
         contaService.vereficardoDeSaldoNaConta(contaSolicitante,transferenciaDto.getValor());
+        contaService.vereficadorDeLimite(transferenciaDto.getValor());
         contaService.transferir(contaSolicitante,contaBeneficiario, transferenciaDto.getValor());
         return ResponseEntity.ok().body(new ResponseDto(MENSAGEM_DE_SUCESSO_AO_TRANSFERIR));
     }

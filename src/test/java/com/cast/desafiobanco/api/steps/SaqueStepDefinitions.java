@@ -29,7 +29,7 @@ public class SaqueStepDefinitions extends StepDefs {
     public void for_executada_a_operação_de_saque() throws Exception {
         // TODO: 12/08/2020 virar chamada direta
 
-        Long numeroDaConta = conta.getNumeroConta();
+        Long numeroDaConta = listaDeContas.stream().findFirst().get().getNumeroConta();
 
         log.info(numeroDaConta.toString());
 
