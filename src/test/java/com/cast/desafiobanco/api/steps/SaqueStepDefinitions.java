@@ -1,36 +1,43 @@
 package com.cast.desafiobanco.api.steps;
 
-import com.cast.desafiobanco.api.dto.ResponseDto;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Quando;
-import org.junit.Assert;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
+import lombok.extern.slf4j.Slf4j;
+import org.mockito.InjectMocks;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.logging.Logger;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-public class SaqueStepDefinitions {
+@Slf4j
+public class SaqueStepDefinitions extends StepDefs {
 
-    private static final Logger log = Logger.getLogger(SaqueStepDefinitions.class.getName());
-    private Double saque;
-    private RestTemplate restTemplate = new RestTemplate();
-    ResponseEntity<ResponseDto> response;
+    private Double valorDeSaque;
+    
+    @Autowired
+    private MockMvc mockMvc;
+
     @Dado("que seja solicitado um saque de {string}")
     public void que_seja_solicitado_um_saque_de(String saque) {
-        log.info(saque);
-        this.saque = Double.parseDouble(saque);
-        Assert.assertEquals(saque, this.saque.toString());
+        valorDeSaque = Double.parseDouble(saque);
+        log.info("Valor de saque: {}", saque);
     }
 
     @Quando("for executada a operação de saque")
-    public void for_executada_a_operação_de_saque() {
-        try {
-            String urlParaSaque = "http://localhost:8081" + "/saques";
-            response = restTemplate.exchange(urlParaSaque, HttpMethod.PUT, null,ResponseDto.class);
-            log.info(response.toString());
-        }catch (HttpClientErrorException ignored) { }
+    public void for_executada_a_operação_de_saque() throws Exception {
+        // TODO: 12/08/2020 virar chamada direta
+
+        Long numeroDaConta = conta.getNumeroConta();
+
+        log.info(numeroDaConta.toString());
+
+        actions = this.mockMvc
+                .perform(put("/contas/saques/" + numeroDaConta + "/"+ valorDeSaque)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print()); 
     }
 
 }

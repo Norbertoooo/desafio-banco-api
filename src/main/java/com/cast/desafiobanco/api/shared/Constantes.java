@@ -1,6 +1,6 @@
 package com.cast.desafiobanco.api.shared;
 
-public final class Constantes {
+public class Constantes {
 
     public Constantes() { }
 

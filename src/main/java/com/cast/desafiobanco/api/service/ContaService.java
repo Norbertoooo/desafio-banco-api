@@ -8,9 +8,11 @@ public interface ContaService {
     List<Conta> findAll();
     Conta create(Conta conta);
     Conta findById(Long id);
+    Conta findByNumeroConta(Long numeroConta);
     void deleteById(Long id);
-    Conta depositar(Long id, Double valor);
-    Conta sacar(Long id, Double valor);
+    Conta depositar(Long numeroDaConta, Double valor);
+    Conta sacar(Long numeroDaConta, Double valor);
+    Long geradorDeNumeroDaConta();
     boolean vereficadorDeLimite(Double valor);
     boolean vereficardoDeSaldoNaConta(Conta conta, Double valor);
     boolean vereficadorDeLimiteAoCriarConta(Conta conta);

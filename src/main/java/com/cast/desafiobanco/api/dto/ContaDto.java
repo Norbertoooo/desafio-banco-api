@@ -9,7 +9,6 @@ import javax.validation.constraints.Size;
 
 @Data @AllArgsConstructor @NoArgsConstructor
 public class ContaDto {
-    private Long numeroDaConta;
     private String nome;
     @NotEmpty(message = "{cpf.not.empty}")
     @Size(max = 11, message = "{cpf.invalid}")
