@@ -4,34 +4,21 @@ import com.cast.desafiobanco.api.domain.Conta;
 import com.cast.desafiobanco.api.dto.ContaDto;
 import com.cast.desafiobanco.api.dto.ResponseDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Então;
 import io.cucumber.java.pt.Quando;
 import io.cucumber.messages.internal.com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import static org.springframework.http.converter.json.Jackson2ObjectMapperBuilder.json;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
 @Slf4j
 public class CriarContaStepDefinitions extends StepDefs {
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private MockMvc mockMvc;
 
     private Gson gson = new Gson();
 
@@ -50,8 +37,8 @@ public class CriarContaStepDefinitions extends StepDefs {
         // TODO: 12/08/2020 virar chamada direta
 
         actions = mockMvc.perform(MockMvcRequestBuilders.post("/contas")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(contaDto))
         );
 

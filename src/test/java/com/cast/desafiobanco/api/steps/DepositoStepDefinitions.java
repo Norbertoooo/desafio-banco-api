@@ -2,14 +2,12 @@ package com.cast.desafiobanco.api.steps;
 
 import com.cast.desafiobanco.api.domain.Conta;
 import com.cast.desafiobanco.api.service.ContaService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Então;
 import io.cucumber.java.pt.Quando;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
@@ -20,9 +18,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 public class DepositoStepDefinitions extends StepDefs{
 
     private Double valorDeDeposito;
-
-    @Autowired
-    private MockMvc mockMvc;
 
     @Autowired
     private ContaService contaService;
@@ -53,8 +48,8 @@ public class DepositoStepDefinitions extends StepDefs{
 
         actions = this.mockMvc
                 .perform(put("/contas/depositos/" + numeroDaConta + "/" + valorDeDeposito)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
     }
 

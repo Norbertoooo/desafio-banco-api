@@ -3,10 +3,7 @@ package com.cast.desafiobanco.api.steps;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Quando;
 import lombok.extern.slf4j.Slf4j;
-import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -15,9 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 public class SaqueStepDefinitions extends StepDefs {
 
     private Double valorDeSaque;
-    
-    @Autowired
-    private MockMvc mockMvc;
 
     @Dado("que seja solicitado um saque de {string}")
     public void que_seja_solicitado_um_saque_de(String saque) {
@@ -35,9 +29,9 @@ public class SaqueStepDefinitions extends StepDefs {
 
         actions = this.mockMvc
                 .perform(put("/contas/saques/" + numeroDaConta + "/"+ valorDeSaque)
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .accept(MediaType.APPLICATION_JSON_UTF8))
-                .andDo(print()); 
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
+                .andDo(print());
     }
 
 }

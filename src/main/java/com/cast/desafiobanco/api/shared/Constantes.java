@@ -1,8 +1,6 @@
 package com.cast.desafiobanco.api.shared;
 
-public class Constantes {
-
-    public Constantes() { }
+public abstract class Constantes {
 
     // Mensagens de sucesso
     public String MENSAGEM_DE_SUCESSO_AO_CRIAR_CONTA = "Conta cadastrada com sucesso!";
@@ -11,7 +9,7 @@ public class Constantes {
     public String MENSAGEM_DE_SUCESSO_AO_TRANSFERIR = "Transferência realizada com sucesso!";
     public String MENSAGEM_DE_SUCESSO_AO_EXCLUIR = "Conta excluida com sucesso!";
 
-    //Mensagens de erro
+    // Mensagens de erro
     public String SALDO_INSUFICIENTE_PARA_ABERTURA_DE_CONTA = "Saldo insuficiente para abertura de nova conta.";
     public String VALOR_MAXIMO_DE_OPERACAO = "Operação de transferência tem um limite máximo de 500 por operação.";
     public String SALDO_INSUFICIENTE = "Saldo insuficiente para a operação.";
