@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/contas")
@@ -40,9 +39,10 @@ public class ContaController extends Constantes{
 
     @PostMapping
     public ResponseEntity<ResponseDto> criar(@Valid @RequestBody ContaDto contaDto) {
+        log.info("Request to create conta: {}", contaDto);
         Conta conta = toEntity(contaDto);
-        conta.setNumeroConta(contaService.geradorDeNumeroDaConta());
-        contaService.vereficadorDeLimiteAoCriarConta(conta);
+        conta.setNumeroConta(contaService.gerarNumeroDaConta());
+        contaService.vereficarLimiteAoCriarConta(conta);
         contaService.create(conta);
         return ResponseEntity.status(HttpStatus.CREATED)
                .body(new ResponseDto(MENSAGEM_DE_SUCESSO_AO_CRIAR_CONTA, conta));
@@ -50,7 +50,8 @@ public class ContaController extends Constantes{
 
     @PutMapping("/depositos/{numeroDaConta}/{valor}")
     public ResponseEntity<ResponseDto> depositar(@PathVariable Long numeroDaConta, @PathVariable Double valor ) {
-        contaService.depositar(numeroDaConta, valor);
+        Conta conta = contaService.findByNumeroConta(numeroDaConta);
+        contaService.depositar(conta, valor);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new ResponseDto(MENSAGEM_DE_SUCESSO_AO_DEPOSITAR));
     }
@@ -58,9 +59,9 @@ public class ContaController extends Constantes{
     @PutMapping("/saques/{numeroDaConta}/{valor}")
     public ResponseEntity<ResponseDto> sacar(@PathVariable Long numeroDaConta, @PathVariable Double valor ) {
         Conta conta = contaService.findByNumeroConta(numeroDaConta);
-        contaService.vereficadorDeLimite(valor);
-        contaService.vereficardoDeSaldoNaConta(conta,valor);
-        contaService.sacar(numeroDaConta,valor);
+        contaService.vereficarLimiteMinimo(valor);
+        contaService.vereficarSaldoNaConta(conta,valor);
+        contaService.sacar(conta,valor);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body( new ResponseDto(MENSAGEM_DE_SUCESSO_AO_SACAR));
     }
@@ -69,8 +70,8 @@ public class ContaController extends Constantes{
     public ResponseEntity<ResponseDto> tranferir(@Valid @RequestBody TransferenciaDto transferenciaDto) {
         Conta contaSolicitante = contaService.findByNumeroConta(transferenciaDto.getContaDoSolicitante());
         Conta contaBeneficiario = contaService.findByNumeroConta(transferenciaDto.getContaDoBeneficiario());
-        contaService.vereficardoDeSaldoNaConta(contaSolicitante,transferenciaDto.getValor());
-        contaService.vereficadorDeLimite(transferenciaDto.getValor());
+        contaService.vereficarSaldoNaConta(contaSolicitante,transferenciaDto.getValor());
+        contaService.vereficarLimiteMinimo(transferenciaDto.getValor());
         contaService.transferir(contaSolicitante,contaBeneficiario, transferenciaDto.getValor());
         return ResponseEntity.ok().body(new ResponseDto(MENSAGEM_DE_SUCESSO_AO_TRANSFERIR));
     }

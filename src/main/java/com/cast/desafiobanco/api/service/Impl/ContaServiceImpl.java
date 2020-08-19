@@ -44,7 +44,7 @@ public class ContaServiceImpl extends Constantes implements ContaService {
     }
 
     @Override
-    public boolean vereficadorDeLimiteAoCriarConta(Conta conta) {
+    public boolean vereficarLimiteAoCriarConta(Conta conta) {
         if(conta.getSaldo() >= VALOR_MINIMO_PARA_CRIAR_CONTA) {
             return true;
         }else{
@@ -53,7 +53,7 @@ public class ContaServiceImpl extends Constantes implements ContaService {
     }
 
     @Override
-    public boolean vereficadorDeLimite(Double valor) {
+    public boolean vereficarLimiteMinimo(Double valor) {
         if(valor <= VALOR_MAXIMO_PARA_TRANSFERENCIA) {
             return true;
         }else {
@@ -62,7 +62,7 @@ public class ContaServiceImpl extends Constantes implements ContaService {
     }
 
     @Override
-    public boolean vereficardoDeSaldoNaConta(Conta conta, Double valor) {
+    public boolean vereficarSaldoNaConta(Conta conta, Double valor) {
         if (valor <= conta.getSaldo()) {
             return true;
         }else{
@@ -71,21 +71,19 @@ public class ContaServiceImpl extends Constantes implements ContaService {
     }
 
     @Override
-    public Conta depositar(Long numeroDaConta, Double valor) {
-      Conta conta = this.findByNumeroConta(numeroDaConta);
+    public Conta depositar(Conta conta, Double valor) {
       conta.setSaldo( conta.getSaldo() + valor);
       return contaRepository.save(conta);
     }
 
     @Override
-    public Conta sacar(Long numeroDaConta, Double valor) {
-        Conta conta = this.findByNumeroConta(numeroDaConta);
+    public Conta sacar(Conta conta, Double valor) {
         conta.setSaldo( conta.getSaldo() - valor);
         return contaRepository.save(conta);
     }
 
     @Override
-    public Long geradorDeNumeroDaConta() {
+    public Long gerarNumeroDaConta() {
         Random random = new Random();
         long numeroDaConta = random.nextInt(100000);
         return numeroDaConta;
