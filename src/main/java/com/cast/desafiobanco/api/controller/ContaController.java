@@ -5,12 +5,14 @@ import com.cast.desafiobanco.api.dto.ContaDto;
 import com.cast.desafiobanco.api.dto.ResponseDto;
 import com.cast.desafiobanco.api.dto.TransferenciaDto;
 import com.cast.desafiobanco.api.service.ContaService;
-import com.cast.desafiobanco.api.shared.Constantes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.cast.desafiobanco.api.shared.Constantes.*;
+
 
 import javax.validation.Valid;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.List;
 @RequestMapping("/contas")
 @CrossOrigin(origins = "*")
 @Slf4j
-public class ContaController extends Constantes{
+public class ContaController {
 
     @Autowired
     private ContaService contaService;
@@ -45,11 +47,11 @@ public class ContaController extends Constantes{
         contaService.vereficarLimiteAoCriarConta(conta);
         contaService.create(conta);
         return ResponseEntity.status(HttpStatus.CREATED)
-               .body(new ResponseDto(MENSAGEM_DE_SUCESSO_AO_CRIAR_CONTA, conta));
+                .body(new ResponseDto(MENSAGEM_DE_SUCESSO_AO_CRIAR_CONTA, conta));
     }
 
     @PutMapping("/depositos/{numeroDaConta}/{valor}")
-    public ResponseEntity<ResponseDto> depositar(@PathVariable Long numeroDaConta, @PathVariable Double valor ) {
+    public ResponseEntity<ResponseDto> depositar(@PathVariable Long numeroDaConta, @PathVariable Double valor) {
         Conta conta = contaService.findByNumeroConta(numeroDaConta);
         contaService.depositar(conta, valor);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
@@ -57,22 +59,22 @@ public class ContaController extends Constantes{
     }
 
     @PutMapping("/saques/{numeroDaConta}/{valor}")
-    public ResponseEntity<ResponseDto> sacar(@PathVariable Long numeroDaConta, @PathVariable Double valor ) {
+    public ResponseEntity<ResponseDto> sacar(@PathVariable Long numeroDaConta, @PathVariable Double valor) {
         Conta conta = contaService.findByNumeroConta(numeroDaConta);
         contaService.vereficarLimiteMinimo(valor);
-        contaService.vereficarSaldoNaConta(conta,valor);
-        contaService.sacar(conta,valor);
+        contaService.vereficarSaldoNaConta(conta, valor);
+        contaService.sacar(conta, valor);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body( new ResponseDto(MENSAGEM_DE_SUCESSO_AO_SACAR));
+                .body(new ResponseDto(MENSAGEM_DE_SUCESSO_AO_SACAR));
     }
 
     @PutMapping("/transferencias")
     public ResponseEntity<ResponseDto> tranferir(@Valid @RequestBody TransferenciaDto transferenciaDto) {
         Conta contaSolicitante = contaService.findByNumeroConta(transferenciaDto.getContaDoSolicitante());
         Conta contaBeneficiario = contaService.findByNumeroConta(transferenciaDto.getContaDoBeneficiario());
-        contaService.vereficarSaldoNaConta(contaSolicitante,transferenciaDto.getValor());
+        contaService.vereficarSaldoNaConta(contaSolicitante, transferenciaDto.getValor());
         contaService.vereficarLimiteMinimo(transferenciaDto.getValor());
-        contaService.transferir(contaSolicitante,contaBeneficiario, transferenciaDto.getValor());
+        contaService.transferir(contaSolicitante, contaBeneficiario, transferenciaDto.getValor());
         return ResponseEntity.ok().body(new ResponseDto(MENSAGEM_DE_SUCESSO_AO_TRANSFERIR));
     }
 

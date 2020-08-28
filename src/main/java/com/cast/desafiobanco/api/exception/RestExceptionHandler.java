@@ -5,7 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -13,8 +13,8 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ControllerAdvice
-public class ExceptionHandler extends ResponseEntityExceptionHandler {
+@RestControllerAdvice
+public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(DomainException.class)
     public ResponseEntity<Object> HandlerDomain(DomainException ex, WebRequest request) {
@@ -39,6 +39,17 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
                 .collect(Collectors.toList());
 
         exception.setTitulo(errors.toString().replace("[","").replace("]",""));
+        ResponseDto responseDto = new ResponseDto("Um erro aconteceu!",exception);
+        return handleExceptionInternal(ex,responseDto,new HttpHeaders(),status,request);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Object> HandlerResourceNotFound(ResourceNotFoundException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        Exception exception = new Exception();
+        exception.setStatus(status.value());
+        exception.setTitulo(ex.getMessage());
+        exception.setDataHora(OffsetDateTime.now());
         ResponseDto responseDto = new ResponseDto("Um erro aconteceu!",exception);
         return handleExceptionInternal(ex,responseDto,new HttpHeaders(),status,request);
     }

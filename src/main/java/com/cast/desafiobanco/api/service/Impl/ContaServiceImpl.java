@@ -2,16 +2,18 @@ package com.cast.desafiobanco.api.service.Impl;
 
 import com.cast.desafiobanco.api.domain.Conta;
 import com.cast.desafiobanco.api.exception.DomainException;
+import com.cast.desafiobanco.api.exception.ResourceNotFoundException;
 import com.cast.desafiobanco.api.repository.ContaRepository;
 import com.cast.desafiobanco.api.service.ContaService;
-import com.cast.desafiobanco.api.shared.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static com.cast.desafiobanco.api.shared.Constantes.*;
+
 @Service
-public class ContaServiceImpl extends Constantes implements ContaService {
+public class ContaServiceImpl implements ContaService {
 
     @Autowired
     private ContaRepository contaRepository;
@@ -29,13 +31,13 @@ public class ContaServiceImpl extends Constantes implements ContaService {
     @Override
     public Conta findById(Long id) {
         return contaRepository.findById(id).
-                orElseThrow( () -> new DomainException(CONTA_NAO_EXISTENTE));
+                orElseThrow( () -> new ResourceNotFoundException(CONTA_NAO_EXISTENTE));
     }
 
     @Override
     public Conta findByNumeroConta(Long numeroConta) {
         return contaRepository.findByNumeroConta(numeroConta)
-                .orElseThrow( () -> new DomainException(CONTA_NAO_EXISTENTE));
+                .orElseThrow( () -> new ResourceNotFoundException(CONTA_NAO_EXISTENTE));
     }
 
     @Override
